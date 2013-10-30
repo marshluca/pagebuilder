@@ -941,7 +941,7 @@
         <div id="logo_box">
             <ul>
                 <li class="hover-tip">
-                    <a href="/dashboard">
+                    <a href="dashboard.html">
                         <div id="builder-logo"></div>
                     </a>
                     <a href="/" class="controls-btn3"></a>
@@ -2590,9 +2590,12 @@
             ];
 
             $(document).ready(function () {
+                // get page_id from url
+                var url = window.location.href;
+                var page_id = url.substr(url.indexOf("=")+1, url.length);
 
                 window._Page = {
-                    id: 36783,
+                    id: page_id,
                     published: false,
                     payperpage: true,
                     seo_enabled: false,
@@ -2603,7 +2606,7 @@
 
                 window._Application = new PageBuilder({
                     //page_id: 36783,
-                    page_id: "IcYFljXp4I",
+                    page_id: page_id,
                     page_version: 1,
                     variation_id: 0,
                     user_id: 29890,

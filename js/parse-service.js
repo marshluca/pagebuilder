@@ -25,7 +25,7 @@ var ParseService = function () {
     this.getPage = function (pageId, version, successCallback, failureCallback) {
       var PageItem = Parse.Object.extend("PageItem");
       var query = new Parse.Query(PageItem);
-      query.equalTo("objectId", pageId);
+      query.equalTo("pageId", pageId);
       query.equalTo("version", version);
       query.first({
         success: function(pageItem) {
@@ -66,9 +66,9 @@ var ParseService = function () {
           var pageItem = new PageItem();             
           pageItem.save({
             version: 1,
-            pageId: page.id,
-            data: blankTemplateData,
-            plug: "Free Landing Pages"
+            pageId: page.id,            
+            plug: "Free Landing Pages",
+            data: JSON.stringify(blankTemplateData)
           }, {
             success: function(pageItem) {
               // The object was saved successfully.
@@ -91,7 +91,9 @@ var ParseService = function () {
     this.savePage = function (pageId, pageData, plug, rePublish, successCallback, failureCallback) {      
       var PageItem = Parse.Object.extend("PageItem");
       var query = new Parse.Query(PageItem);
-      query.get(pageId, {
+      query.equalTo("pageId", pageId);
+      query.equalTo("version", 1); // TODO:
+      query.first({
         success: function(pageItem) {
           // The object was retrieved successfully.
           // alert('New object created with objectId: ' + pageItem.id);                    
