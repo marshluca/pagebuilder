@@ -80,8 +80,8 @@
     <script type="text/javascript" src="https://d1i0kec7rwhor.cloudfront.net/js-site-site-279-jmin.js.jgz"></script>
     <script type="text/javascript" src="https://d1i0kec7rwhor.cloudfront.net/js-lib-jquery.input-hint-279-jmin.js.jgz"></script>
 
-
-
+    <script src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
+    <script src="js/parse-service.js"></script>
 
 
     <link rel="stylesheet" type="text/css" href="https://d1i0kec7rwhor.cloudfront.net/css-ip_v2-dashboard-279-jmin.css.jgz" media="screen" />
@@ -383,6 +383,11 @@
                         user_id: 29890
                     });
 
+                    $("#btn_create_new_landing_page").click(function () {
+                        var parseService = new ParseService();
+                        parseService.createPage("Untitled");
+                    });
+
                 });
             </script>
 
@@ -407,7 +412,7 @@
 
                     <div id="dashboard_main_head">
 
-                        <a id="btn_create_new_landing_page" class="left ip_form_button ip_form_bluebutton" href="http://app.instapage.com/builder/new_page">Create New Landing Page</a>
+                        <a id="btn_create_new_landing_page" class="left ip_form_button ip_form_bluebutton" href="#">Create New Landing Page</a>
 
 
                         <div class="create-new-group hover-tip">
