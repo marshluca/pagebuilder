@@ -23,16 +23,18 @@ var ParseService = function () {
     this.getPage = function (pageId, version, successCallback, failureCallback) {
       var PageItem = Parse.Object.extend("PageItem");
       var query = new Parse.Query(PageItem);
-      query.equalTo("id", pageId);
+      query.equalTo("objectId", pageId);
       query.equalTo("version", version);
       query.first({
-        success: function(object) {
-          // Successfully retrieved the object.
+        success: function(pageItem) {
+          // Successfully retrieved the object.                  
+          var response = JSON.stringify(pageItem);          
+          var pageData = JSON.stringify(JSON.parse(response).data);
           var data = {
               "error": false,
               "success": true,
               "message": "Page loaded.",
-              "data": object.data
+              "data": pageData
           }
           successCallback(data);
         },

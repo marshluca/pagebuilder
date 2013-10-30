@@ -344,9 +344,12 @@ var PageBuilder = function (b) {
         // })
         
         var successCallback = function (e) {
-            c.debug("Data received from server.");
-            if (e && e.error == false) {
-                c.variations = $.parseJSON(e.data);
+            c.debug("Data received from server.");            
+            if (e && e.error == false) {  
+                // It's strange here !!!                                              
+                c.variations = JSON.parse(JSON.parse(JSON.parse(e.data)));                
+                console.log(c.variations);
+                
                 for (var f = 0; f < c.variations; f++) {
                     if (!c.variations[f].variation_name) {
                         c.generateVariationName(f)
