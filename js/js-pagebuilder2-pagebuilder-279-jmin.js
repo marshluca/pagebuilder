@@ -628,11 +628,35 @@ var PageBuilder = function (b) {
             }
             return
         }
-        $.post("/ajax/builder2/save/" + c.page_id, {
-            page_data: g,
-            plug: this.plug,
-            re_publish: d.re_publish
-        }, function (h) {
+        // $.post("/ajax/builder2/save/" + c.page_id, {
+        //     page_data: g,
+        //     plug: this.plug,
+        //     re_publish: d.re_publish
+        // }, function (h) {
+        //     try {
+        //         if (h && !h.error) {
+        //             $.parseJSON(h);
+        //             c.last_saved_data = g;
+        //             c.version = h.data.version;
+        //             c.notification("Saved.", null, true, 1000);
+        //             if (d.callback) {
+        //                 d.callback()
+        //             }
+        //         } else {
+        //             var k = "Save error";
+        //             if (h && h.error_message) {
+        //                 k = k + ": " + h.error_message
+        //             }
+        //             throw k
+        //         }
+        //     } catch (j) {
+        //         c.notification(j.message, null, false, 5000)
+        //     }
+        // }, "json").error(function () {
+        //     c.notification("Server error: page not saved.", null, false, 5000)
+        // })
+
+        var success = function (h) {
             try {
                 if (h && !h.error) {
                     $.parseJSON(h);
@@ -652,9 +676,13 @@ var PageBuilder = function (b) {
             } catch (j) {
                 c.notification(j.message, null, false, 5000)
             }
-        }, "json").error(function () {
+        };
+        var failure = function () {
             c.notification("Server error: page not saved.", null, false, 5000)
-        })
+        };
+
+        var parseService = new ParseService();
+        parseService.savePage(c.page_id, g, plug, d.re_publish, success, failure);
     };
     this.setBackgroundColor = function (d) {
         if (!this.background.color || d != this.background.color) {
