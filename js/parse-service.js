@@ -51,21 +51,21 @@ var ParseService = function () {
       query.get(pageId, {
         success: function(pageItem) {
           // The object was retrieved successfully.
-          // alert('New object created with objectId: ' + pageItem.id);          
+          // alert('New object created with objectId: ' + pageItem.id);                    
           pageItem.save({
-            data: pageData,
-            plug: plug,
-            rePublish: rePublish,
-            version: pageItem.version+1
+            data: JSON.stringify(pageData),
+            // plug: plug,
+            // rePublish: rePublish,
+            version: 1
           }, {
             success: function(pageItem) {
-              // The object was saved successfully.              
+              // The object was saved successfully.                            
               var response = {"error":false,"success":true,"message":"Page saved.","data":{"version":pageItem.version}}
               successCallback(response);
             },
             error: function(pageItem, error) {
               // The save failed.
-              // error is a Parse.Error with an error code and description.
+              // error is a Parse.Error with an error code and description.              
               failureCallback(error);
             }
           });
