@@ -29,6 +29,9 @@ var PageBuilder = function (b) {
     this.application_profile = {};
     this.application_profile.start_time = this.date.getTime();
     this.application_profile.draggable_snap_disabled = b.draggable_snap_disabled !== "undefined" ? b.draggable_snap_disabled : false;
+
+    this.parseService = new ParseService();
+
     this.addWidget = function (d) {
         this.widgets.push(d);
         this.updateWidgetFonts();
@@ -305,39 +308,72 @@ var PageBuilder = function (b) {
     this.loadPage = function (d) {
         c.debug("Load page data from server.");
         this.dim();
-        $.ajax({
-            // url: "/ajax/builder2/get/" + c.page_id + "/" + c.version,
-            url: "/builder/json/get-page-version.json",
-            dataType: "json",
-            success: function (e) {
-                c.debug("Data received from server.");
-                if (e && e.error == false) {
-                    c.variations = $.parseJSON(e.data);
-                    for (var f = 0; f < c.variations; f++) {
-                        if (!c.variations[f].variation_name) {
-                            c.generateVariationName(f)
-                        }
+
+        // $.ajax({
+        //     // url: "/ajax/builder2/get/" + c.page_id + "/" + c.version,
+        //     url: "/builder/json/get-page-version.json",
+        //     dataType: "json",
+        //     success: function (e) {
+        //         c.debug("Data received from server.");
+        //         if (e && e.error == false) {
+        //             c.variations = $.parseJSON(e.data);
+        //             for (var f = 0; f < c.variations; f++) {
+        //                 if (!c.variations[f].variation_name) {
+        //                     c.generateVariationName(f)
+        //                 }
+        //             }
+        //             c.variation = c.variation && c.variations[c.variation] ? c.variation : 0;
+        //             c.renderPageFromData(c.variations[c.variation]);
+        //             c.last_saved_data = $.toJSON(c.prepareSaveData());
+        //             c.undo_redo_stack[0] = c.last_saved_data;
+        //             c.notification("Page loaded.", null, true, 1000);
+        //             c.builderOracleVariations = new BuilderOracleVariations();
+        //             if (d && typeof (d) == "function") {
+        //                 d()
+        //             }
+        //         } else {
+        //             var g = "Load error";
+        //             if (e && e.error_message) {
+        //                 g = g + ": " + e.error_message
+        //             }
+        //             throw g
+        //         }
+        //     }
+        // }).error(function () {
+        //     c.notification("Server error: page not loaded.", null, false, 5000)
+        // })
+        
+        var successCallback = function (e) {
+            c.debug("Data received from server.");
+            if (e && e.error == false) {
+                c.variations = $.parseJSON(e.data);
+                for (var f = 0; f < c.variations; f++) {
+                    if (!c.variations[f].variation_name) {
+                        c.generateVariationName(f)
                     }
-                    c.variation = c.variation && c.variations[c.variation] ? c.variation : 0;
-                    c.renderPageFromData(c.variations[c.variation]);
-                    c.last_saved_data = $.toJSON(c.prepareSaveData());
-                    c.undo_redo_stack[0] = c.last_saved_data;
-                    c.notification("Page loaded.", null, true, 1000);
-                    c.builderOracleVariations = new BuilderOracleVariations();
-                    if (d && typeof (d) == "function") {
-                        d()
-                    }
-                } else {
-                    var g = "Load error";
-                    if (e && e.error_message) {
-                        g = g + ": " + e.error_message
-                    }
-                    throw g
                 }
+                c.variation = c.variation && c.variations[c.variation] ? c.variation : 0;
+                c.renderPageFromData(c.variations[c.variation]);
+                c.last_saved_data = $.toJSON(c.prepareSaveData());
+                c.undo_redo_stack[0] = c.last_saved_data;
+                c.notification("Page loaded.", null, true, 1000);
+                c.builderOracleVariations = new BuilderOracleVariations();
+                if (d && typeof (d) == "function") {
+                    d()
+                }
+            } else {
+                var g = "Load error";
+                if (e && e.error_message) {
+                    g = g + ": " + e.error_message
+                }
+                throw g
             }
-        }).error(function () {
+        };
+        var failureCallback = function () {
             c.notification("Server error: page not loaded.", null, false, 5000)
-        })
+        };
+
+        this.parseService.getPage(c.page_id, c.version, successCallback, failureCallback);
     };
     this.notification = function (e, h, j, f) {
         this.dim();
@@ -680,9 +716,8 @@ var PageBuilder = function (b) {
         var failure = function () {
             c.notification("Server error: page not saved.", null, false, 5000)
         };
-
-        var parseService = new ParseService();
-        parseService.savePage(c.page_id, g, plug, d.re_publish, success, failure);
+        
+        this.parseService.savePage(c.page_id, g, plug, d.re_publish, success, failure);
     };
     this.setBackgroundColor = function (d) {
         if (!this.background.color || d != this.background.color) {

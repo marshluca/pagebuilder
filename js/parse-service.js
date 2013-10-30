@@ -20,6 +20,29 @@ var ParseService = function () {
         });
     };
 
+    this.getPage = function (pageId, version, successCallback, failureCallback) {
+      var PageItem = Parse.Object.extend("PageItem");
+      var query = new Parse.Query(PageItem);
+      query.equalTo("id", pageId);
+      query.equalTo("version", version);
+      query.first({
+        success: function(object) {
+          // Successfully retrieved the object.
+          var data = {
+              "error": false,
+              "success": true,
+              "message": "Page loaded.",
+              "data": object.data
+          }
+          successCallback(data);
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+          failureCallback(error);
+        }
+      });
+    };
+
     this.savePage = function (pageId, pageData, plug, rePublish, successCallback, failureCallback) {      
       var PageItem = Parse.Object.extend("PageItem");
       var query = new Parse.Query(PageItem);
