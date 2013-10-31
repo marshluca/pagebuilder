@@ -198,7 +198,8 @@ var InstapageDashboard = function (a) {
         return null
     };
     this.load = function (c) {
-        $.ajax({
+        
+        /* $.ajax({
             // url: "/ajax/dashboard/get-user-data",
 			url: "/builder/json/get-user-data.json",
             type: "GET",
@@ -212,7 +213,21 @@ var InstapageDashboard = function (a) {
                     }
                 }
             }
-        })
+        }) */
+        var success = function (d) {
+            if (d && d.success && d.data) {                    
+                b.user = d.data.user;
+                b.dom.find(".loading-dashboard").fadeOut();
+                if (typeof (c) == "function") {                        
+                    c(d.data.page_groups, d.data.pages, d.data.deleted_pages);
+                }
+            }
+        };
+        var failure = function () {};
+
+        var parseService = new ParseService();
+        parseService.getAllPages(success, failure);
+
     };
     this.render = function (d, c, f, g) {
         if (d) {

@@ -2,22 +2,67 @@ Parse.initialize("zUNltvbSGI2Jh1j8hJwD9acWtdbxAA5XzmmS95w7", "Tp83XbAPCCFHnse06A
 
 var blankTemplateData = "[{\"id\":0,\"variation_name\":\"A\",\"page_blocks\":[{\"id\":\"page_block_header\",\"height\":\"83px\"},{\"id\":\"page_block_above_fold\",\"height\":\"586px\"},{\"id\":\"page_block_below_fold\",\"height\":\"422px\"},{\"id\":\"page_block_footer\",\"height\":\"55px\"}],\"elements\":[],\"background\":{\"color\":\"ffffff\",\"image\":null,\"position\":\"top left\",\"repeat\":\"repeat\",\"page\":{\"background_color\":\"transparent\"}},\"font\":\"Open Sans\",\"title\":\"Page title for search engines\",\"description\":\"Page description for search engines\",\"plug\":\"Free Landing Page\",\"name\":\"Demo4\",\"traffic\":[{\"date\":\"2013-10-23\",\"visits\":0,\"conversions\":0},{\"date\":\"2013-10-24\",\"visits\":0,\"conversions\":0},{\"date\":\"2013-10-25\",\"visits\":0,\"conversions\":0},{\"date\":\"2013-10-26\",\"visits\":0,\"conversions\":0},{\"date\":\"2013-10-27\",\"visits\":0,\"conversions\":0},{\"date\":\"2013-10-28\",\"visits\":0,\"conversions\":0},{\"date\":\"2013-10-29\",\"visits\":0,\"conversions\":0}]}]"
 
+var user = {
+      id: 29890,
+      username: "marshluca@gmail.com",
+      firstname: "Lin",
+      lastname: "Zhang",
+      email: "marshluca@gmail.com",
+      confirmed_email: 0,
+      registered_on: "2013-10-24 08:23:02",
+      disabled: 1,
+      admin_disabled: 0,
+      gender: null,
+      location: null,
+      country: null,
+      years_as_affiliate: 0,
+      facebook_uid: 0,
+      twitter: null,
+      avatar_image: null,
+      show_facebook_dialog: 1,
+      show_intro_video: 1,
+      initial_feedback_left: 0,
+      invites_issued: 0,
+      max_invites: 5,
+      invitation_text: null,
+      recent_subscriber: null,
+      force_downgrade: 0,
+      page2_enabled: 0,
+      pay_per_page: 1,
+      variations_tested: 1,
+      completed_guiders: 0,
+      bilder_2_tour_completed: 1,
+      pages_total: 4,
+      pages_limit: 1,
+      pages_left: -2
+}
+
+
 var ParseService = function () {
 
-    this.getAllPages = function () {
+    this.getAllPages = function (successCallback, errorCallback) {
         var Page = Parse.Object.extend("Page");
         var query = new Parse.Query(Page);
         query.find({
           success: function(results) {
-            alert("Successfully retrieved " + results.length + " scores.");
+            // alert("Successfully retrieved " + results.length + " scores.");
             // Do something with the returned Parse.Object values
-            for (var i = 0; i < results.length; i++) { 
-              var page = results[i];
-              alert(page);              
-            }
+            console.log();
+            var data = {
+                error: false,
+                success: true,
+                message: "Success",
+                data: {
+                    page_groups: [],
+                    pages: JSON.parse(JSON.stringify(results)),
+                    deleted_pages: [],
+                    user: user                }
+            };
+            successCallback(data);
           },
           error: function(error) {
             alert("Error: " + error.code + " " + error.message);
+            errorCallback(error);
           }
         });
     };
