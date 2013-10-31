@@ -47,14 +47,20 @@ var ParseService = function () {
           success: function(results) {
             // alert("Successfully retrieved " + results.length + " scores.");
             // Do something with the returned Parse.Object values
-            console.log();
+
+            // objectId doesnot work on html template
+            pages = JSON.parse(JSON.stringify(results));
+            for(var i=0; i < pages.length; i++) {
+              pages[i]["id"] = pages[i]["objectId"]; 
+            }
+
             var data = {
                 error: false,
                 success: true,
                 message: "Success",
                 data: {
                     page_groups: [],
-                    pages: JSON.parse(JSON.stringify(results)),
+                    pages: pages,
                     deleted_pages: [],
                     user: user                }
             };

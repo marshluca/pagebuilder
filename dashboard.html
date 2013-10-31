@@ -288,9 +288,9 @@
                         <div class="page_description">
                             <div class="page_name">
                                 {{if !page.page1}}
-                                    <a href="editor.html?id=${page.objectId}" title="Preview ${page.title}" target="_blank">
+                                    <a href="editor.html?id=${page.id}" title="Preview ${page.title}" target="_blank">
                                 {{/if}}
-                                        <span id="page-name-${page.objectId}">{{if page.title}}${page.title}{{else}}(no title){{/if}}</span>
+                                        <span id="page-name-${page.id}">{{if page.title}}${page.title}{{else}}(no title){{/if}}</span>
                                 {{if !page.page1}}
                                     </a>
                                 {{/if}}
@@ -326,7 +326,8 @@
                         <div class="dashboard_controls page_options">
                             <ul>
                                 <li class="hover-tip">
-                                    <a id="edit" class="controls-btn btn_edit_page" href="/builder{{if !page.page1}}2{{/if}}?id=${page.id}"></a>
+                                    <!-- <a id="edit" class="controls-btn btn_edit_page" href="/builder{{if !page.page1}}2{{/if}}?id=${page.id}"></a> -->
+                                    <a id="edit" class="controls-btn btn_edit_page" href="editor.html?id=${page.id}"></a>
                                     <div class="tip" aria-disabled="true" aria-label="Edit Page" data-tooltip="Edit Page"></div>
                                 </li>
                                 <li class="hover-tip">
@@ -385,7 +386,7 @@
 
                     $("#btn_create_new_landing_page").click(function () {
                         var parseService = new ParseService();
-                        parseService.createPage("Untitled");
+                        parseService.createPage("Hello World");
                     });
 
                 });
